@@ -12,6 +12,8 @@ census <- read_xls(path = "data-raw/QuickStatsPopulationandDwellings.xls",
                    skip = 7,
                    n_max = 18) %>%
     select(age = X__1,
+           "Male 1996" = Male,
+           "Female 1996" = Female,
            "Male 2001" = Male__1,
            "Female 2001" = Female__1,
            "Male 2006" = Male__2,
@@ -25,6 +27,16 @@ census <- read_xls(path = "data-raw/QuickStatsPopulationandDwellings.xls",
 
 ## Check against original data. Totals are rounded independently,
 ## so have to check against exactly the same cells
+
+check_total_96 <- read_xls(path = "data-raw/QuickStatsPopulationandDwellings.xls",
+                           sheet = "Table 3",
+                           range = "B9:C26",
+                           col_names = FALSE) %>%
+    sum()
+stopifnot(all.equal(sum(subarray(census, time == "1996")), check_total_96))
+
+
+
 check_total_01 <- read_xls(path = "data-raw/QuickStatsPopulationandDwellings.xls",
                            sheet = "Table 3",
                            range = "E9:F26",

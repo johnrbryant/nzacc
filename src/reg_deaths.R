@@ -7,30 +7,24 @@ library(readr)
 
 ## Process data
 
-reg_deaths <- read_csv(file = "data-raw/VSD349201_20181004_082014_77.csv",
-                       skip = 2,
-                       n_max = 5)
-Male <- reg_deaths %>%
-    select(Infant:`100 years and over`) %>%
-    gather(key = age, value = count) %>%
-    mutate(sex = "Male")
-Female <- reg_deaths %>%
-    select(Infant_1:`100 years and over_1`) %>%
-    gather(key = age, value = count) %>%
-    mutate(sex = "Female") %>%
-    mutate(age = sub("_1", "", age))
-reg_deaths <- bind_rows(Female, Male) %>%
+reg_deaths <- read_csv(file = "data-raw/VSD349201_20181014_082255_47.csv",
+                       skip = 1,
+                       n_max = 44) %>%
+    rename(sex = X1, age = X2) %>%
+    mutate(sex = fillForward(sex)) %>%
     mutate(age = cleanAgeGroup(age)) %>%
-    mutate(time = "2002-2006") %>%
+    gather(key = time, value = count, -age, -sex) %>%
     xtabs(count ~ age + sex + time, data = .) %>%
-    Counts()
+    Counts(dimscale = c(time = "Intervals")) %>%
+    collapseIntervals(dimension = "time", width = 5) %>%
+    collapseIntervals(dimension = "age", width = 5)
 
 ## Check against original data. Totals are rounded independently,
 ## so have to check against exactly the same cells
-check_total <- read_csv(file = "data-raw/VSD349201_20181004_082014_77.csv",
-                        skip = 2,
-                        n_max = 5) %>%
-    select(-X1) %>%
+check_total <- read_csv(file = "data-raw/VSD349201_20181014_082255_47.csv",
+                        skip = 1,
+                        n_max = 44) %>%
+    select(-X1, -X2) %>%
     unlist() %>%
     sum()
 

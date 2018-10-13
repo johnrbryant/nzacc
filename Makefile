@@ -2,8 +2,8 @@
 N_BURNIN = 10000
 N_SIM = 10000
 N_CHAIN = 4
-N_THIN = 40
-
+N_THIN = 50
+SEX_RATIO = 106
 
 .PHONY: all
 all: out/model.est
@@ -19,20 +19,30 @@ data/net_undercount.rds : src/net_undercount.R
 	Rscript $<
 
 data/reg_births.rds : src/reg_births.R \
-                      data-raw/VSB355801_20181004_081753_17.csv
+                      data-raw/VSB355801_20181014_082447_13.csv
 	Rscript $<
 
 data/reg_deaths.rds : src/reg_deaths.R \
-                      data-raw/VSD349201_20181004_082014_77.csv
+                      data-raw/VSD349201_20181014_082255_47.csv
 	Rscript $<
 
-data/arrivals.rds : src/arrivals.R \
-                    data-raw/ITM525401_20181004_082501_59.csv
+data/arrivals_1216.rds : src/arrivals_1216.R \
+                         data-raw/ITM525401_20181014_082741_1.csv
 	Rscript $<
 
-data/departures.rds : src/departures.R \
-                      data-raw/ITM525401_20181004_082501_59.csv
+data/departures_1216.rds : src/departures_1216.R \
+                           data-raw/ITM525401_20181014_082741_1.csv
 	Rscript $<
+
+data/arrivals_plt.rds : src/arrivals_plt.R \
+                        data-raw/ITM340201_20181014_083122_44.csv
+	Rscript $<
+
+data/departures_plt.rds : src/departures_plt.R \
+                          data-raw/ITM340201_20181014_083122_44.csv
+	Rscript $<
+
+
 
 
 ## Set up model
@@ -41,9 +51,9 @@ out/account.rds : src/account.R \
                   data/census.rds \
                   data/reg_births.rds \
                   data/reg_deaths.rds \
-                  data/arrivals.rds \
-                  data/departures.rds
-	Rscript $<
+                  data/arrivals_plt.rds \
+                  data/departures_plt.rds
+	Rscript $< --sex_ratio $(SEX_RATIO)
 
 out/system_models.rds : src/system_models.R
 	Rscript $<
@@ -52,8 +62,10 @@ out/datasets.rds : src/datasets.R \
                    data/census.rds \
                    data/reg_births.rds \
                    data/reg_deaths.rds \
-                   data/arrivals.rds \
-                   data/departures.rds
+                   data/arrivals_1216.rds \
+                   data/departures_1216.rds \
+                   data/arrivals_plt.rds \
+                   data/departures_plt.rds
 	Rscript $<
 
 out/data_models.rds : src/data_models.R \

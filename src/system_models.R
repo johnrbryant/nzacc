@@ -5,25 +5,31 @@ library(demest)
 population <- Model(population ~ Poisson(mean ~ age * sex + time, useExpose = FALSE),
                     jump = 0.01)
 
-births <- Model(births ~ Poisson(mean ~ age + sex),
+births <- Model(births ~ Poisson(mean ~ age * time + sex),
                 age ~ DLM(trend = NULL,
                           damp = NULL),
                 sex ~ ExchFixed(sd = 0.05),
-                priorSD = HalfT(scale = 0.05),
-                jump = 0.01)
+                time ~ DLM(trend = NULL,
+                           damp = NULL),
+                jump = 0.02)
 
-deaths <- Model(deaths ~ Poisson(mean ~ age + sex),
+deaths <- Model(deaths ~ Poisson(mean ~ age * time + age * sex),
                 age ~ DLM(damp = NULL),
+                time ~ DLM(damp = NULL),
                 jump = 0.04)
 
-in_migration <- Model(in_migration ~ Poisson(mean ~ age),
+in_migration <- Model(in_migration ~ Poisson(mean ~ age + time),
                       age ~ DLM(trend = NULL,
                                 damp = NULL),
+                      time ~ DLM(trend = NULL,
+                                 damp = NULL),
                       jump = 0.04)
 
-out_migration <- Model(out_migration ~ Poisson(mean ~ age),
+out_migration <- Model(out_migration ~ Poisson(mean ~ age + time),
                        age ~ DLM(trend = NULL,
                                  damp = NULL),
+                       time ~ DLM(trend = NULL,
+                                  damp = NULL),
                        jump = 0.04)
 
 
