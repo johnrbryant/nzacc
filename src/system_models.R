@@ -11,26 +11,26 @@ births <- Model(births ~ Poisson(mean ~ age * time + sex),
                 sex ~ ExchFixed(sd = 0.05),
                 time ~ DLM(trend = NULL,
                            damp = NULL),
-                jump = 0.02)
+                jump = 0.015)
 
 deaths <- Model(deaths ~ Poisson(mean ~ age * time + age * sex),
                 age ~ DLM(damp = NULL),
                 time ~ DLM(damp = NULL),
-                jump = 0.04)
+                jump = 0.035)
 
 in_migration <- Model(in_migration ~ Poisson(mean ~ age + time),
                       age ~ DLM(trend = NULL,
                                 damp = NULL),
                       time ~ DLM(trend = NULL,
                                  damp = NULL),
-                      jump = 0.04)
+                      jump = 0.03)
 
 out_migration <- Model(out_migration ~ Poisson(mean ~ age + time),
                        age ~ DLM(trend = NULL,
                                  damp = NULL),
                        time ~ DLM(trend = NULL,
                                   damp = NULL),
-                       jump = 0.04)
+                       jump = 0.03)
 
 
 system_models <- list(population,
