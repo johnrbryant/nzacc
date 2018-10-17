@@ -49,10 +49,10 @@ departures_plt <- Model(departures_plt ~ Poisson(mean ~ age + time),
                         series = "out_migration",
                         jump = 0.02)
 
-arrivals_1216 <- Model(arrivals_1216 ~ PoissonBinomial(prob = 0.95),
+arrivals_1216 <- Model(arrivals_1216 ~ PoissonBinomial(prob = 0.96),
                        series = "in_migration")
 
-departures_1216 <- Model(departures_1216 ~ PoissonBinomial(prob = 0.95),
+departures_1216 <- Model(departures_1216 ~ PoissonBinomial(prob = 0.96),
                          series = "out_migration")
 
 
