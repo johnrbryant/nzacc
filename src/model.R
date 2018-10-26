@@ -28,6 +28,8 @@ system_models <- readRDS("out/system_models.rds")
 datasets <- readRDS("out/datasets.rds")
 data_models <- readRDS("out/data_models.rds")
 
+Sys.time()
+
 estimateAccount(account = account,
                 systemModels = system_models,
                 datasets = datasets,
@@ -37,6 +39,9 @@ estimateAccount(account = account,
                 nSim = n_sim,
                 nChain = n_chain,
                 nThin = n_thin)
+Sys.time()
+
+
 
 options(width = 120)
 fetchSummary("out/model.est")
