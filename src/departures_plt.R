@@ -4,6 +4,18 @@ library(tidyr)
 library(dplyr)
 library(dembase)
 library(readr)
+library(docopt)
+
+'
+Usage:
+departures_plt.R [options]
+
+Options:
+--add_lexis [default: FALSE]
+' -> doc
+opts <- docopt(doc)
+add_lexis <- opts$add_lexis %>% as.logical()
+
 
 
 ## Process data
@@ -20,6 +32,13 @@ departures_plt <- read_csv(file = "data-raw/ITM340201_20181014_083122_44.csv",
     Counts(dimscales = c(time = "Intervals")) %>%
     collapseIntervals(dimension = "time", width = 5)
 
+if (add_lexis) {
+    departures_plt <- departures_plt %>%
+        addDimension(name = "triangle", labels = c("Lower", "Upper"), scale = 0.5) %>%
+        toInteger(force = TRUE)
+}
+
+
 ## Check against original data.
 ## so have to check against exactly the same cells
 check_total <- read_csv(file = "data-raw/ITM340201_20181014_083122_44.csv",
@@ -30,10 +49,10 @@ check_total <- read_csv(file = "data-raw/ITM340201_20181014_083122_44.csv",
     unlist() %>%
     sum()
 
-stopifnot(all.equal(sum(departures_plt), check_total))
+stopifnot(all.equal(sum(departures_plt), check_total, tol = 0.001))
 
 
 ## Save
 
-saveRDS(departures_plt,
-        file = "data/departures_plt.rds")
+file <- if (add_lexis) "data/departures_plt_lex.rds" else "data/departures_plt.rds"
+saveRDS(departures_plt, file = file)

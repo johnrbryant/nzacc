@@ -4,6 +4,19 @@ library(tidyr)
 library(dplyr)
 library(dembase)
 library(readr)
+library(docopt)
+
+'
+Usage:
+departures_1216.R [options]
+
+Options:
+--add_lexis [default: FALSE]
+' -> doc
+opts <- docopt(doc)
+add_lexis <- opts$add_lexis %>% as.logical()
+
+
 
 ## Process data
 
@@ -18,6 +31,12 @@ departures_1216 <- read_csv(file = "data-raw/ITM525401_20181014_082741_1.csv",
     Counts(dimscales = c(time = "Intervals")) %>%
     collapseIntervals(dimension = "time", width = 5)
 
+if (add_lexis) {
+    departures_1216 <- departures_1216 %>%
+        addDimension(name = "triangle", labels = c("Lower", "Upper"), scale = 0.5) %>%
+        toInteger(force = TRUE)
+}
+
 ## Check against original data. Totals are rounded independently,
 ## so have to check against exactly the same cells
 check_total <- read_csv(file = "data-raw/ITM525401_20181014_082741_1.csv",
@@ -27,10 +46,10 @@ check_total <- read_csv(file = "data-raw/ITM525401_20181014_082741_1.csv",
     unlist() %>%
     sum()
 
-stopifnot(all.equal(sum(departures_1216), check_total))
+stopifnot(all.equal(sum(departures_1216), check_total, tol = 0.001))
 
 
 ## Save
 
-saveRDS(departures_1216,
-        file = "data/departures_1216.rds")
+file <- if (add_lexis) "data/departures_1216_lex.rds" else "data/departures_1216.rds"
+saveRDS(departures_1216, file = file)

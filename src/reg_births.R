@@ -4,6 +4,18 @@ library(tidyr)
 library(dplyr)
 library(dembase)
 library(readr)
+library(docopt)
+
+'
+Usage:
+reg_births.R [options]
+
+Options:
+--add_lexis [default: FALSE]
+' -> doc
+opts <- docopt(doc)
+add_lexis <- opts$add_lexis %>% as.logical()
+
 
 ## Process data
 
@@ -17,7 +29,14 @@ reg_births <- read_csv(file = "data-raw/VSB355801_20181014_082447_13.csv",
     xtabs(count ~ age + time, data = .) %>%
     Counts(dimscale = c(time = "Intervals")) %>%
     collapseIntervals(dimension = "time", width = 5)
-    
+
+if (add_lexis) {
+    reg_births <- reg_births %>%
+        addDimension(name = "triangle", labels = c("Lower", "Upper"), scale = 0.5) %>%
+        toInteger(force = TRUE)
+}
+
+
 ## Check against original data. Totals are rounded independently,
 ## so have to check against exactly the same cells
 check_total <- read_csv(file = "data-raw/VSB355801_20181014_082447_13.csv",
@@ -31,5 +50,5 @@ stopifnot(all.equal(sum(reg_births), check_total, tol = 0.001))
 
 ## Save
 
-saveRDS(reg_births,
-        file = "data/reg_births.rds")
+file <- if (add_lexis) "data/reg_births_lex.rds" else "data/reg_births.rds"
+saveRDS(reg_births, file = file)
