@@ -4,10 +4,10 @@ N_BURNIN = 200000
 N_SIM = 200000
 N_CHAIN = 4
 N_THIN = 500
-N_BURNIN_LEX = 200
-N_SIM_LEX = 200
+N_BURNIN_LEX = 400000
+N_SIM_LEX = 400000
 N_CHAIN_LEX = 4
-N_THIN_LEX = 5
+N_THIN_LEX = 1000
 
 
 .PHONY: all
@@ -108,7 +108,7 @@ out/model.est : src/model.R \
                 out/system_models.rds \
                 out/datasets.rds \
                 out/data_models.rds
-	Rscript $< --n_burnin $(N_BURNIN) --n_sim $(N_SIM) --n_chain $(N_CHAIN) --n_thin $(N_THIN)
+	Rscript $< --n_burnin $(N_BURNIN) --n_sim $(N_SIM) --n_chain $(N_CHAIN) --n_thin $(N_THIN) --add_lexis FALSE
 
 
 out/model_lex.est : src/model.R \
@@ -116,7 +116,7 @@ out/model_lex.est : src/model.R \
                     out/system_models.rds \
                     out/datasets_lex.rds \
                     out/data_models.rds
-	Rscript $< --n_burnin $(N_BURNIN_LEX) --n_sim $(N_SIM_LEX) --n_chain $(N_CHAIN_LEX) --n_thin $(N_THIN_LEX)
+	Rscript $< --n_burnin $(N_BURNIN_LEX) --n_sim $(N_SIM_LEX) --n_chain $(N_CHAIN_LEX) --n_thin $(N_THIN_LEX) --add_lexis TRUE
 
 
 
