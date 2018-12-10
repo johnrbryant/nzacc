@@ -3,53 +3,21 @@ library(methods)
 library(tidyr)
 library(dplyr)
 library(dembase)
-library(readxl)
+library(readr)
 
 ## Process data
 
-census <- read_xls(path = "data-raw/QuickStatsPopulationandDwellings.xls",
-                   sheet = "Table 3",
-                   skip = 7,
-                   n_max = 18) %>%
-    select(age = X__1,
-           "Male 1996" = Male,
-           "Female 1996" = Female,
-           "Male 2001" = Male__1,
-           "Female 2001" = Female__1,
-           "Male 2006" = Male__2,
-           "Female 2006" = Female__2) %>%
-    gather(key = "sex_time", value = "count", -age) %>%
-    separate(col = sex_time, into = c("sex", "time")) %>%
+census <- read_csv("data-raw/Age_by_sex/TABLECODE8001_Data_e35fb0f7-8ed5-4d62-86c4-269454dd04f4.csv") %>%
+    select(age = "Age group", sex = Sex, time = Year, count = Value) %>%
     mutate(age = cleanAgeGroup(age)) %>%
     xtabs(count ~ age + sex + time, data = .) %>%
-    Counts(dimscales = c(time = "Points")) %>%
-    toInteger()
+    Counts(dimscales = c(time = "Points"))
 
-## Check against original data. Totals are rounded independently,
-## so have to check against exactly the same cells
-
-check_total_96 <- read_xls(path = "data-raw/QuickStatsPopulationandDwellings.xls",
-                           sheet = "Table 3",
-                           range = "B9:C26",
-                           col_names = FALSE) %>%
+check_total <- read_csv("data-raw/Age_by_sex/TABLECODE8001_Data_e35fb0f7-8ed5-4d62-86c4-269454dd04f4.csv") %>%
+    pull(Value) %>%
     sum()
-stopifnot(all.equal(sum(subarray(census, time == "1996")), check_total_96))
 
-
-
-check_total_01 <- read_xls(path = "data-raw/QuickStatsPopulationandDwellings.xls",
-                           sheet = "Table 3",
-                           range = "E9:F26",
-                           col_names = FALSE) %>%
-    sum()
-stopifnot(all.equal(sum(subarray(census, time == "2001")), check_total_01))
-
-check_total_06 <- read_xls(path = "data-raw/QuickStatsPopulationandDwellings.xls",
-                           sheet = "Table 3",
-                           range = "H9:I26",
-                           col_names = FALSE) %>%
-    sum()
-stopifnot(all.equal(sum(subarray(census, time == "2006")), check_total_06))
+stopifnot(all.equal(sum(census), check_total))
 
 
 ## Save
