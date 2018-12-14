@@ -13,8 +13,10 @@ exposure <- exposure(population)
 
 
 death_rate <- fetch("out/model.est",
-                    where = c("system", "deaths", "likelihood", "rate")) %>%
-    collapseDimension(dimension = "triangle", weights = exposure)
+                    where = c("system", "deaths", "likelihood", "rate"),
+                    impute = TRUE) %>%
+    collapseDimension(dimension = "triangle",
+                      weights = 1)
 
 life_exp <- death_rate %>%
     LifeTable() %>%
@@ -29,7 +31,8 @@ p <- dplot(~ time | sex,
 
 graphics.off()
 pdf(file = "out/fig_life_exp.pdf",
-    width = 7,
-    height = 4.5)
+    width = 0,
+    height = 0,
+    paper = "a4r")
 plot(p)
 dev.off()

@@ -25,20 +25,9 @@ p <- p + p_mid
 
 graphics.off()
 pdf(file = "out/fig_population.pdf",
-    width = 7,
-    height = 4.5)
+    width = 0,
+    height = 0,
+    paper = "a4r")
 plot(p)
 dev.off()
-
-
-
-
-tfr <- tfr(births / exposure)
-
-
-out_migration <- fetch("out/model.est", where = c("account", "out_migration"))
-
-dplot(~ age | factor(time) * sex,
-      data = out_migration,
-      midpoints = "age")
 

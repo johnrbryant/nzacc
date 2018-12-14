@@ -4,10 +4,9 @@ library(methods)
 library(demest)
 library(latticeExtra)
 library(dplyr)
-library(demlife)
 
-
-cov_cen <- fetchCoverage("out/model.est", dataset = "census")
+cov_cen <- fetchCoverage("out/model.est",
+                         dataset = "census")
 
 p <- dplot(~ age | factor(time) * sex,
            data = cov_cen,
@@ -18,10 +17,10 @@ p <- dplot(~ age | factor(time) * sex,
            as.table = TRUE) %>%
     useOuterStrips()
 
-
 graphics.off()
-pdf(file = "out/fig_cov_census.pdf",
-    width = 7,
-    height = 4.5)
+pdf(file = "out/fig_cover_census.pdf",
+    width = 0,
+    height = 0,
+    paper = "a4r")
 plot(p)
 dev.off()

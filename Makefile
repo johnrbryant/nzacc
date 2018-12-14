@@ -6,7 +6,11 @@ N_CHAIN = 4
 N_THIN = 20
 
 .PHONY: all
-all: out/model.est
+all: out/fig_population.pdf \
+     out/fig_deaths.pdf \
+     out/fig_cover_census.pdf \
+     out/fig_life_exp.pdf
+
 
 
 ## Prepare data
@@ -76,6 +80,27 @@ out/model.est : src/model.R \
                 out/datasets.rds \
                 out/data_models.rds
 	Rscript $< --n_burnin $(N_BURNIN) --n_sim $(N_SIM) --n_chain $(N_CHAIN) --n_thin $(N_THIN)
+
+
+
+## Graphs
+
+out/fig_population.pdf : src/fig_population.R \
+                         out/model.est
+	Rscript $<
+
+out/fig_deaths.pdf : src/fig_deaths.R \
+                     out/model.est
+	Rscript $<
+
+out/fig_cover_census.pdf : src/fig_cover_census.R \
+                           out/model.est
+	Rscript $<
+
+out/fig_life_exp.pdf : src/fig_life_exp.R \
+                       out/model.est
+	Rscript $<
+
 
 
 ## Clean up

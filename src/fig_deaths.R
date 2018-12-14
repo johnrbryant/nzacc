@@ -25,8 +25,9 @@ p <- dplot(~ age | factor(time) * sex,
 
 graphics.off()
 pdf(file = "out/fig_deaths.pdf",
-    width = 7,
-    height = 4.5)
+    width = 0,
+    height = 0,
+    paper = "a4r")
 plot(p)
 dev.off()
 
