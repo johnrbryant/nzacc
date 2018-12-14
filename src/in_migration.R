@@ -4,11 +4,12 @@ library(demest)
 library(latticeExtra)
 library(dplyr)
 
-population <- fetch("out/model.est",
-                    where = c("account", "population"))
+in_migration <- fetch("out/model.est",
+                      where = c("account", "in_migration"))
+
 
 p <- dplot(~ age | factor(time) * sex,
-           data = population,
+           data = in_migration,
            midpoints = "age",
            col = "salmon",
            xlab = "Age",
@@ -17,14 +18,14 @@ p <- dplot(~ age | factor(time) * sex,
            as.table = TRUE) %>%
     useOuterStrips()
 p_mid <- dplot(~ age | factor(time) * sex,
-           data = population,
+           data = in_migration,
            midpoints = "age",
            col = "salmon",
            prob = 0.5)
 p <- p + p_mid
 
 graphics.off()
-pdf(file = "out/fig_population.pdf",
+pdf(file = "out/fig_in_migration.pdf",
     width = 7,
     height = 4.5)
 plot(p)
@@ -32,13 +33,4 @@ dev.off()
 
 
 
-
-tfr <- tfr(births / exposure)
-
-
-out_migration <- fetch("out/model.est", where = c("account", "out_migration"))
-
-dplot(~ age | factor(time) * sex,
-      data = out_migration,
-      midpoints = "age")
 

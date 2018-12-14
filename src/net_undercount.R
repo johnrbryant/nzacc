@@ -4,6 +4,7 @@ library(tibble)
 
 ## Values copied from Statistics New Zealand. 2006.
 ## A Report on the 2006 Post-enumeration Survey. Table 1
+## and 'pes-2013-tables' spreadsheet.
 
 net_undercount <- tribble(
     ~variable, ~time, ~age,    ~value,
@@ -42,7 +43,19 @@ net_undercount <- tribble(
     "error",   2006,  "0-14",  0.5,
     "error",   2006,  "15-29", 1.6,
     "error",   2006,  "30-44", 0.6,
-    "error",   2006,  "45+",   0.5
+    "error",   2006,  "45+",   0.5,
+    "000",     2013,  "0-14",  27,
+    "000",     2013,  "15-29", 42,
+    "000",     2013,  "30-44", 17,
+    "000",     2013,  "45+",   18,
+    "percent", 2013,  "0-14",  3,
+    "percent", 2013,  "15-29", 4.8,
+    "percent", 2013,  "30-44", 2,
+    "percent", 2013,  "45+",   1,
+    "error",   2013,  "0-14",  0.9,
+    "error",   2013,  "15-29", 1.1,
+    "error",   2013,  "30-44", 0.7,
+    "error",   2013,  "45+",   0.4
 )
 
 

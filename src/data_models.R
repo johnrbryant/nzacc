@@ -33,27 +33,66 @@ census <- Model(census ~ NormalFixed(mean = mean, sd = sd, useExpose = TRUE),
 
 ## Other
 
-reg_births <- Model(reg_births ~ PoissonBinomial(prob = 0.98),
+reg_births <- Model(reg_births ~ Round3(),
                     series = "births")
 
-reg_deaths <- Model(reg_deaths ~ PoissonBinomial(prob = 0.98),
+reg_deaths <- Model(reg_deaths ~ Round3(),
                     series = "deaths")
 
 arrivals_plt <- Model(arrivals_plt ~ Poisson(mean ~ age + time),
-                      time ~ DLM(trend = NULL, damp = NULL),
+                      age ~ DLM(level = Level(scale = HalfT(scale = 0.01)),
+                                trend = NULL,
+                                damp = NULL,
+                                error = Error(scale = HalfT(scale = 0.01))),
+                      time ~ DLM(level = Level(scale = HalfT(scale = 0.01)),
+                                 trend = NULL,
+                                 damp = NULL,
+                                 error = Error(scale = HalfT(scale = 0.01))),
                       series = "in_migration",
-                      jump = 0.02)
+                      lower = 0.25,
+                      upper = 4,
+                      jump = 0.03)
 
 departures_plt <- Model(departures_plt ~ Poisson(mean ~ age + time),
-                        time ~ DLM(trend = NULL, damp = NULL),
+                        age ~ DLM(level = Level(scale = HalfT(scale = 0.01)),
+                                  trend = NULL,
+                                  damp = NULL,
+                                  error = Error(scale = HalfT(scale = 0.01))),
+                        time ~ DLM(level = Level(scale = HalfT(scale = 0.01)),
+                                   trend = NULL,
+                                   damp = NULL,
+                                   error = Error(scale = HalfT(scale = 0.01))),
                         series = "out_migration",
-                        jump = 0.02)
+                        lower = 0.25,
+                        upper = 4,
+                        jump = 0.03)
 
 arrivals_1216 <- Model(arrivals_1216 ~ PoissonBinomial(prob = 0.96),
                        series = "in_migration")
 
 departures_1216 <- Model(departures_1216 ~ PoissonBinomial(prob = 0.96),
                          series = "out_migration")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Save

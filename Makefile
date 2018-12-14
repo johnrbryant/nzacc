@@ -1,69 +1,46 @@
 
 SEX_RATIO = 106
-N_BURNIN = 200000
-N_SIM = 200000
+N_BURNIN = 7500
+N_SIM = 7500
 N_CHAIN = 4
-N_THIN = 500
-N_BURNIN_LEX = 400000
-N_SIM_LEX = 400000
-N_CHAIN_LEX = 4
-N_THIN_LEX = 1000
-
+N_THIN = 20
 
 .PHONY: all
-all: out/model_lex.est
+all: out/model.est
 
 
 ## Prepare data
 
 data/census.rds : src/census.R \
-                  data-raw/QuickStatsPopulationandDwellings.xls
+                  data-raw/Age_by_sex/TABLECODE8001_Data_e35fb0f7-8ed5-4d62-86c4-269454dd04f4.csv
 	Rscript $<
 
 data/net_undercount.rds : src/net_undercount.R
 	Rscript $<
 
 data/reg_births.rds : src/reg_births.R \
-                      data-raw/VSB355801_20181014_082447_13.csv
-	Rscript $< --add_lexis FALSE
-
-data/reg_births_lex.rds : src/reg_births.R \
-                          data-raw/VSB355801_20181014_082447_13.csv
-	Rscript $< --add_lexis TRUE
+                      data-raw/VSB355801_20181209_055056_66.csv
+	Rscript $<
 
 data/reg_deaths.rds : src/reg_deaths.R \
-                      data-raw/VSD349201_20181014_082255_47.csv
-	Rscript $< --add_lexis FALSE
-
-data/reg_deaths_lex.rds : src/reg_deaths.R \
-                          data-raw/VSD349201_20181014_082255_47.csv
-	Rscript $< --add_lexis TRUE
+                      data-raw/VSD349201_20181209_054420_13.csv
+	Rscript $<
 
 data/arrivals_1216.rds : src/arrivals_1216.R \
-                         data-raw/ITM525401_20181014_082741_1.csv
-	Rscript $< --add_lexis FALSE
-
-data/arrivals_1216_lex.rds : src/arrivals_1216.R \
-                             data-raw/ITM525401_20181014_082741_1.csv
-	Rscript $< --add_lexis TRUE
+                         data-raw/ITM525401_20181209_055319_42.csv
+	Rscript $<
 
 data/departures_1216.rds : src/departures_1216.R \
-                           data-raw/ITM525401_20181014_082741_1.csv
-	Rscript $< --add_lexis FALSE
-
-data/departures_1216_lex.rds : src/departures_1216.R \
-                               data-raw/ITM525401_20181014_082741_1.csv
-	Rscript $< --add_lexis TRUE
+                           data-raw/ITM525401_20181209_055319_42.csv
+	Rscript $<
 
 data/arrivals_plt.rds : src/arrivals_plt.R \
-                        data-raw/ITM340201_20181014_083122_44.csv
-	Rscript $< --add_lexis FALSE
+                        data-raw/ITM340201_20181209_055538_93.csv
+	Rscript $<
 
-data/departures_plt_lex.rds : src/departures_plt.R \
-                              data-raw/ITM340201_20181014_083122_44.csv
-	Rscript $< --add_lexis TRUE
-
-
+data/departures_plt.rds : src/departures_plt.R \
+                              data-raw/ITM340201_20181209_055538_93.csv
+	Rscript $<
 
 
 ## Set up model
@@ -87,17 +64,7 @@ out/datasets.rds : src/datasets.R \
                    data/departures_1216.rds \
                    data/arrivals_plt.rds \
                    data/departures_plt.rds
-	Rscript $< --add_lexis FALSE
-
-out/datasets_lex.rds : src/datasets.R \
-                       data/census.rds \
-                       data/reg_births.rds \
-                       data/reg_deaths.rds \
-                       data/arrivals_1216.rds \
-                       data/departures_1216.rds \
-                       data/arrivals_plt.rds \
-                       data/departures_plt.rds
-	Rscript $< --add_lexis TRUE
+	Rscript $<
 
 out/data_models.rds : src/data_models.R \
                       data/net_undercount.rds
@@ -108,16 +75,7 @@ out/model.est : src/model.R \
                 out/system_models.rds \
                 out/datasets.rds \
                 out/data_models.rds
-	Rscript $< --n_burnin $(N_BURNIN) --n_sim $(N_SIM) --n_chain $(N_CHAIN) --n_thin $(N_THIN) --add_lexis FALSE
-
-
-out/model_lex.est : src/model.R \
-                    out/account.rds \
-                    out/system_models.rds \
-                    out/datasets_lex.rds \
-                    out/data_models.rds
-	Rscript $< --n_burnin $(N_BURNIN_LEX) --n_sim $(N_SIM_LEX) --n_chain $(N_CHAIN_LEX) --n_thin $(N_THIN_LEX) --add_lexis TRUE
-
+	Rscript $< --n_burnin $(N_BURNIN) --n_sim $(N_SIM) --n_chain $(N_CHAIN) --n_thin $(N_THIN)
 
 
 ## Clean up

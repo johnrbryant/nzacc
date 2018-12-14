@@ -13,28 +13,21 @@ Options:
 --n_sim [default: 5]
 --n_chain [default: 4]
 --n_thin [default: 1]
---add_lexis [default: FALSE]
 ' -> doc
 opts <- docopt(doc)
 n_burnin <- opts$n_burnin %>% as.integer()
 n_sim <- opts$n_sim %>% as.integer()
 n_chain <- opts$n_chain %>% as.integer()
 n_thin <- opts$n_thin %>% as.integer()
-add_lexis <- opts$add_lexis %>% as.logical()
-
 
 set.seed(0)
 
 account <- readRDS("out/account.rds")
 system_models <- readRDS("out/system_models.rds")
-if (add_lexis) {
-    datasets <- readRDS("out/datasets.rds")
-} else {
-    datasets <- readRDS("out/datasets_lex.rds")
-}
+datasets <- readRDS("out/datasets.rds")
 data_models <- readRDS("out/data_models.rds")
 
-filename <- if (add_lexis) "out/model_lex.est" else "out/model.est"
+filename <- "out/model.est"
 
 Sys.time()
 

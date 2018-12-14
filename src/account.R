@@ -19,21 +19,22 @@ pr_female_male <- c(100 / (100 + sex_ratio), sex_ratio / (100 + sex_ratio))
 set.seed(0)
 
 population <- readRDS("data/census.rds") %>%
-    extrapolate(along = "time", labels = c("2011", "2016"))
+    subarray(time == "1996", drop = FALSE) %>%
+    extrapolate(along = "time", labels = 1997:2018)
 
 births <- readRDS("data/reg_births.rds") %>%
     addDimension(name = "sex", labels = c("Female", "Male"), scale = pr_female_male) %>%
-    toInteger(force = TRUE)
+    toInteger(force = TRUE) %>%
+    expandIntervals(dimension = "age", breaks = 13:50)
 
 deaths <- readRDS("data/reg_deaths.rds") %>%
-    collapseIntervals(dimension = "age", breaks = seq(0, 85, 5)) %>%
-    extrapolate(along = "time", labels = "1997-2001")
+    extrapolate(along = "time", labels = 1997:1999)
     
 in_migration <- readRDS("data/arrivals_plt.rds") %>%
-    expandIntervals(dimension = "age", breaks = seq(0, 85, 5))
+    expandIntervals(dimension = "age", breaks = 0:100)
 
 out_migration <- readRDS("data/departures_plt.rds") %>%
-    expandIntervals(dimension = "age", breaks = seq(0, 85, 5))
+    expandIntervals(dimension = "age", breaks = 0:100)
 
 
 account <- Movements(population = population,
