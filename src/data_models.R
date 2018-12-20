@@ -49,6 +49,7 @@ arrivals_plt <- Model(arrivals_plt ~ Poisson(mean ~ age + time),
                                  damp = NULL,
                                  error = Error(scale = HalfT(scale = 0.01))),
                       series = "in_migration",
+                      priorSD = HalfT(scale = 0.1),
                       lower = 0.25,
                       upper = 4,
                       jump = 0.03)
@@ -63,6 +64,7 @@ departures_plt <- Model(departures_plt ~ Poisson(mean ~ age + time),
                                    damp = NULL,
                                    error = Error(scale = HalfT(scale = 0.01))),
                         series = "out_migration",
+                        priorSD = HalfT(scale = 0.1),
                         lower = 0.25,
                         upper = 4,
                         jump = 0.03)
@@ -72,24 +74,6 @@ arrivals_1216 <- Model(arrivals_1216 ~ PoissonBinomial(prob = 0.96),
 
 departures_1216 <- Model(departures_1216 ~ PoissonBinomial(prob = 0.96),
                          series = "out_migration")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
