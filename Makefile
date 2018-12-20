@@ -3,7 +3,8 @@ SEX_RATIO = 106
 N_BURNIN = 10000
 N_SIM = 10000
 N_CHAIN = 4
-N_THIN = 20
+N_THIN = 40
+SEED = 1
 
 .PHONY: all
 all: out/fig_population.pdf \
@@ -79,7 +80,7 @@ out/model.est : src/model.R \
                 out/system_models.rds \
                 out/datasets.rds \
                 out/data_models.rds
-	Rscript $< --n_burnin $(N_BURNIN) --n_sim $(N_SIM) --n_chain $(N_CHAIN) --n_thin $(N_THIN)
+	Rscript $< --n_burnin $(N_BURNIN) --n_sim $(N_SIM) --n_chain $(N_CHAIN) --n_thin $(N_THIN) --seed $(SEED)
 
 
 
