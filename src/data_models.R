@@ -52,7 +52,7 @@ arrivals_plt <- Model(arrivals_plt ~ Poisson(mean ~ age + time),
                       priorSD = HalfT(scale = 0.1),
                       lower = 0.25,
                       upper = 4,
-                      jump = 0.03)
+                      jump = 0.035)
 
 departures_plt <- Model(departures_plt ~ Poisson(mean ~ age + time),
                         age ~ DLM(level = Level(scale = HalfT(scale = 0.01)),
@@ -67,7 +67,7 @@ departures_plt <- Model(departures_plt ~ Poisson(mean ~ age + time),
                         priorSD = HalfT(scale = 0.1),
                         lower = 0.25,
                         upper = 4,
-                        jump = 0.03)
+                        jump = 0.035)
 
 arrivals_1216 <- Model(arrivals_1216 ~ PoissonBinomial(prob = 0.96),
                        series = "in_migration")
