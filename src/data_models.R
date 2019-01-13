@@ -40,39 +40,39 @@ reg_deaths <- Model(reg_deaths ~ Round3(),
                     series = "deaths")
 
 arrivals_plt <- Model(arrivals_plt ~ Poisson(mean ~ age + time),
-                      age ~ DLM(level = Level(scale = HalfT(scale = 0.01)),
+                      age ~ DLM(level = Level(scale = HalfT(scale = 0.05)),
                                 trend = NULL,
                                 damp = NULL,
-                                error = Error(scale = HalfT(scale = 0.01))),
-                      time ~ DLM(level = Level(scale = HalfT(scale = 0.01)),
+                                error = Error(scale = HalfT(scale = 0.05))),
+                      time ~ DLM(level = Level(scale = HalfT(scale = 0.05)),
                                  trend = NULL,
                                  damp = NULL,
-                                 error = Error(scale = HalfT(scale = 0.01))),
+                                 error = Error(scale = HalfT(scale = 0.05))),
                       series = "in_migration",
                       priorSD = HalfT(scale = 0.1),
-                      lower = 0.25,
-                      upper = 4,
+                      lower = 0.75,
+                      upper = 1.25,
                       jump = 0.035)
 
 departures_plt <- Model(departures_plt ~ Poisson(mean ~ age + time),
-                        age ~ DLM(level = Level(scale = HalfT(scale = 0.01)),
+                        age ~ DLM(level = Level(scale = HalfT(scale = 0.05)),
                                   trend = NULL,
                                   damp = NULL,
-                                  error = Error(scale = HalfT(scale = 0.01))),
-                        time ~ DLM(level = Level(scale = HalfT(scale = 0.01)),
+                                  error = Error(scale = HalfT(scale = 0.05))),
+                        time ~ DLM(level = Level(scale = HalfT(scale = 0.05)),
                                    trend = NULL,
                                    damp = NULL,
-                                   error = Error(scale = HalfT(scale = 0.01))),
+                                   error = Error(scale = HalfT(scale = 0.05))),
                         series = "out_migration",
                         priorSD = HalfT(scale = 0.1),
-                        lower = 0.25,
-                        upper = 4,
+                        lower = 0.75,
+                        upper = 1.25,
                         jump = 0.035)
 
-arrivals_1216 <- Model(arrivals_1216 ~ PoissonBinomial(prob = 0.96),
+arrivals_1216 <- Model(arrivals_1216 ~ PoissonBinomial(prob = 0.95),
                        series = "in_migration")
 
-departures_1216 <- Model(departures_1216 ~ PoissonBinomial(prob = 0.96),
+departures_1216 <- Model(departures_1216 ~ PoissonBinomial(prob = 0.95),
                          series = "out_migration")
 
 
