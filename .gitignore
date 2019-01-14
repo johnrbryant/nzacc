@@ -22,4 +22,3 @@ Rplots.pdf
 *.est_3
 *.est_4
 *.rds
-out/fig_mcmc*.pdf
