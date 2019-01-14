@@ -7,7 +7,12 @@ N_THIN = 50
 SEED = 1
 
 .PHONY: all
-all: out/fig_population.pdf \
+all: out/fig_mcmc_population.pdf \
+     out/fig_mcmc_births.pdf \
+     out/fig_mcmc_deaths.pdf \
+     out/fig_mcmc_in_migration.pdf \
+     out/fig_mcmc_out_migration.pdf \
+     out/fig_population.pdf \
      out/fig_deaths.pdf \
      out/fig_cover_census.pdf \
      out/fig_life_exp.pdf
@@ -83,8 +88,31 @@ out/model.est : src/model.R \
 	Rscript $< --n_burnin $(N_BURNIN) --n_sim $(N_SIM) --n_chain $(N_CHAIN) --n_thin $(N_THIN) --seed $(SEED)
 
 
+## Graphs of convergence
 
-## Graphs
+out/fig_mcmc_population.pdf : src/fig_mcmc.R \
+                              out/model.est
+	Rscript $< --series population
+
+out/fig_mcmc_births.pdf : src/fig_mcmc.R \
+                          out/model.est
+	Rscript $< --series births
+
+out/fig_mcmc_deaths.pdf : src/fig_mcmc.R \
+                          out/model.est
+	Rscript $< --series deaths
+
+out/fig_mcmc_in_migration.pdf : src/fig_mcmc.R \
+                                out/model.est
+	Rscript $< --series in_migration
+
+out/fig_mcmc_out_migration.pdf : src/fig_mcmc.R \
+                                 out/model.est
+	Rscript $< --series out_migration
+
+
+
+## Graphs of estimates
 
 out/fig_population.pdf : src/fig_population.R \
                          out/model.est
