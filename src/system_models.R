@@ -36,7 +36,7 @@ births <- Model(births ~ Poisson(mean ~ age * time + sex),
                 priorSD = HalfT(scale = 0.1),
                 lower = 0.00001,
                 upper = 1,
-                jump = 0.03)
+                jump = 0.02)
 
 deaths <- Model(deaths ~ Poisson(mean ~ age * time + age * sex),
                 age ~ DLM(level = Level(scale = HalfT(scale = 0.025)),
@@ -54,7 +54,7 @@ deaths <- Model(deaths ~ Poisson(mean ~ age * time + age * sex),
                 priorSD = HalfT(scale = 0.1),
                 lower = 0.00001,
                 upper = 1,
-                jump = 0.15)
+                jump = 0.1)
 
 in_migration <- Model(in_migration ~ Poisson(mean ~ age + time + sex),
                       age ~ DLM(level = Level(scale = HalfT(scale = 0.05)),
