@@ -1,16 +1,13 @@
 
-
 library(methods)
 library(demest)
 library(latticeExtra)
 library(dplyr)
 library(demlife)
 
-
 population <- fetch("out/model.est",
                     where = c("account", "population"))
 exposure <- exposure(population)
-
 
 death_rate <- fetch("out/model.est",
                     where = c("system", "deaths", "likelihood", "rate"),
@@ -24,15 +21,20 @@ life_exp <- death_rate %>%
 
 p <- dplot(~ time | sex,
            data = life_exp,
-           col = "salmon",
-           xlab = "Period",
-           ylab = "Years")
+           col = "grey",
+           xlab = "Year",
+           scales = list(tck = 0.4,
+                         y = list(relation = "free")),
+           midpoints = "time",
+           ylab = "Life expectancy",
+           par.settings = list(fontsize = list(text = 7),
+                               strip.background = list(col = "grey90")),
+           between = list(y = 0.2))
 
 
 graphics.off()
-pdf(file = "out/fig_life_exp.pdf",
-    width = 0,
-    height = 0,
-    paper = "a4r")
+pdf(file = "out/fig_nz_life_exp.pdf",
+    width = 5,
+    height = 2.5)
 plot(p)
 dev.off()

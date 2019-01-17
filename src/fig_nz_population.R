@@ -32,12 +32,12 @@ p <- dplot(~ time | age,
                    data = census,
                    type = "p",
                    pch = 3,
-                   cex = 0.8,
+                   cex = 0.6,
                    subarray = age %in% age_groups,
                    col = "black"))
 
 graphics.off()
-pdf(file = "out/fig_population_nz.pdf",
+pdf(file = "out/fig_nz_population.pdf",
     width = 5,
     height = 3.5)
 plot(p)

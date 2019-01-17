@@ -43,7 +43,8 @@ for (i in seq_len(n_cell)) {
         p <- xyplot(mcmc_list,
                     main = names(ans)[i],
                     layout = c(2, NA),
-                    par.settings = list(fontsize = list(text = 3),
+                    scales = list(tck = 0.3),
+                    par.settings = list(fontsize = list(text = 5),
                                         strip.background = list(col = "grey90")),
                     as.table = TRUE)
         N <- dim(p)
