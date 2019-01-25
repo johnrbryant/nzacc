@@ -4,7 +4,7 @@ library(demest)
 library(dplyr)
 
 
-## Census
+## Census + PES
 
 census_counts <- readRDS("data/census.rds")
 
@@ -31,13 +31,35 @@ census <- Model(census ~ NormalFixed(mean = mean, sd = sd, useExpose = TRUE),
                 series = "population")
 
 
-## Other
+
+## IDI-ERP
+
+idi_erp <- readRDS("data/idi_erp.rds")
+
+mean <- idi_erp / idi_erp
+
+
+sd <- 0.02 * idi_erp %>% 
+    Values()
+
+idi_erp <- Model(idi_erp~ NormalFixed(mean = mean, sd = sd, useExpose = TRUE),
+                 series = "population")
+
+
+
+## Registered births
 
 reg_births <- Model(reg_births ~ Round3(),
                     series = "births")
 
+
+## Registered deaths
+
 reg_deaths <- Model(reg_deaths ~ Round3(),
                     series = "deaths")
+
+
+## Arrivals and departures - PLT
 
 arrivals_plt <- Model(arrivals_plt ~ Poisson(mean ~ age * sex),
                       age ~ DLM(level = Level(scale = HalfT(scale = 0.05)),
@@ -48,8 +70,6 @@ arrivals_plt <- Model(arrivals_plt ~ Poisson(mean ~ age * sex),
                       age:sex ~ Exch(),
                       series = "in_migration",
                       priorSD = HalfT(scale = 0.1),
-                      lower = 0.75,
-                      upper = 1.25,
                       jump = 0.035)
 
 departures_plt <- Model(departures_plt ~ Poisson(mean ~ age * sex),
@@ -61,9 +81,10 @@ departures_plt <- Model(departures_plt ~ Poisson(mean ~ age * sex),
                         age:sex ~ Exch(),
                         series = "out_migration",
                         priorSD = HalfT(scale = 0.1),
-                        lower = 0.75,
-                        upper = 1.25,
                         jump = 0.035)
+
+
+## Arrivals and departures - 12/16 rule
 
 arrivals_1216 <- Model(arrivals_1216 ~ PoissonBinomial(prob = 0.95),
                        series = "in_migration")
@@ -78,6 +99,7 @@ departures_1216 <- Model(departures_1216 ~ PoissonBinomial(prob = 0.95),
 ## Save
 
 data_models <- list(census = census,
+                    idi_erp = idi_erp,
                     reg_births = reg_births,
                     reg_deaths = reg_deaths,
                     arrivals_plt = arrivals_plt,
