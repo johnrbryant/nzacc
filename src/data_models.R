@@ -23,8 +23,8 @@ percent_error <- net_undercount %>%
     xtabs(value ~ time + age, data = .) %>%
     Values()
 
-# mult by 2 because splitting into smaller groups
-sd <- (2 * (percent_error / 100) * census_counts / 1.96) %>% 
+# mult by 3 because splitting into smaller groups
+sd <- (3 * (percent_error / 100) * census_counts / 1.96) %>% 
     Values()
 
 census <- Model(census ~ NormalFixed(mean = mean, sd = sd, useExpose = TRUE),
@@ -39,30 +39,22 @@ reg_births <- Model(reg_births ~ Round3(),
 reg_deaths <- Model(reg_deaths ~ Round3(),
                     series = "deaths")
 
-arrivals_plt <- Model(arrivals_plt ~ Poisson(mean ~ age * sex),
+arrivals_plt <- Model(arrivals_plt ~ Poisson(mean ~ age + sex),
                       age ~ DLM(level = Level(scale = HalfT(scale = 0.05)),
                                 trend = NULL,
                                 damp = NULL,
                                 error = Error(scale = HalfT(scale = 0.05))),
-                      sex ~ ExchFixed(sd = 0.2),
-                      age:sex ~ Exch(),
                       series = "in_migration",
                       priorSD = HalfT(scale = 0.1),
-                      lower = 0.75,
-                      upper = 1.25,
                       jump = 0.035)
 
-departures_plt <- Model(departures_plt ~ Poisson(mean ~ age * sex),
+departures_plt <- Model(departures_plt ~ Poisson(mean ~ age + sex),
                         age ~ DLM(level = Level(scale = HalfT(scale = 0.05)),
                                   trend = NULL,
                                   damp = NULL,
                                   error = Error(scale = HalfT(scale = 0.05))),
-                        sex ~ ExchFixed(sd = 0.2),
-                        age:sex ~ Exch(),
                         series = "out_migration",
                         priorSD = HalfT(scale = 0.1),
-                        lower = 0.75,
-                        upper = 1.25,
                         jump = 0.035)
 
 arrivals_1216 <- Model(arrivals_1216 ~ PoissonBinomial(prob = 0.95),

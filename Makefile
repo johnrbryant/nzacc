@@ -1,10 +1,10 @@
 
 SEX_RATIO = 106
-N_BURNIN = 2000
-N_SIM = 2000
+N_BURNIN = 5000
+N_SIM = 5000
 N_CHAIN = 4
-N_THIN = 5
-SEED = 1
+N_THIN = 20
+SEED = 0
 
 .PHONY: all
 all: out/fig_mcmc_population.pdf \
@@ -13,9 +13,10 @@ all: out/fig_mcmc_population.pdf \
      out/fig_mcmc_in_migration.pdf \
      out/fig_mcmc_out_migration.pdf \
      out/fig_population.pdf \
-     out/fig_deaths.pdf \
-     out/fig_cover_census.pdf \
-     out/fig_life_exp.pdf
+     out/fig_nz_population.pdf \
+     out/fig_nz_net_migration.pdf \
+     out/fig_nz_life_exp.pdf \
+     out/fig_nz_cover_census.pdf
 
 
 
@@ -118,17 +119,25 @@ out/fig_population.pdf : src/fig_population.R \
                          out/model.est
 	Rscript $<
 
-out/fig_deaths.pdf : src/fig_deaths.R \
-                     out/model.est
+
+## Graphs for paper
+
+out/fig_nz_population.pdf : src/fig_nz_population.R \
+                            out/model.est
 	Rscript $<
 
-out/fig_cover_census.pdf : src/fig_cover_census.R \
-                           out/model.est
+out/fig_nz_net_migration.pdf : src/fig_nz_net_migration.R \
+                               out/model.est
 	Rscript $<
 
-out/fig_life_exp.pdf : src/fig_life_exp.R \
-                       out/model.est
+out/fig_nz_life_exp.pdf : src/fig_nz_life_exp.R \
+                          out/model.est
 	Rscript $<
+
+out/fig_nz_cover_census.pdf : src/fig_nz_cover_census.R \
+                              out/model.est
+	Rscript $<
+
 
 
 
