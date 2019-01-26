@@ -1,9 +1,9 @@
 
 SEX_RATIO = 106
-N_BURNIN = 5000
-N_SIM = 5000
-N_CHAIN = 4
-N_THIN = 20
+N_BURNIN = 1000
+N_SIM = 1000
+N_CHAIN = 10
+N_THIN = 2
 SEED = 0
 
 .PHONY: all
@@ -27,6 +27,10 @@ data/census.rds : src/census.R \
 	Rscript $<
 
 data/net_undercount.rds : src/net_undercount.R
+	Rscript $<
+
+data/idi_erp.rds : src/idi_erp.R \
+                   data-raw/exp-pop-estimates-2007-16-csv.csv
 	Rscript $<
 
 data/reg_births.rds : src/reg_births.R \
@@ -62,13 +66,14 @@ out/account.rds : src/account.R \
                   data/reg_deaths.rds \
                   data/arrivals_plt.rds \
                   data/departures_plt.rds
-	Rscript $< --sex_ratio $(SEX_RATIO)
+	Rscript $< --sex_ratio $(SEX_RATIO) --seed $(SEED)
 
 out/system_models.rds : src/system_models.R
 	Rscript $<
 
 out/datasets.rds : src/datasets.R \
                    data/census.rds \
+                   data/idi_erp.rds \
                    data/reg_births.rds \
                    data/reg_deaths.rds \
                    data/arrivals_1216.rds \

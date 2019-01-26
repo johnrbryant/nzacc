@@ -40,7 +40,7 @@ mean <- idi_erp / idi_erp
 
 
 sd <- 0.02 * idi_erp %>% 
-    Values()
+    Values(dimscale = c(time = "Points"))
 
 idi_erp <- Model(idi_erp~ NormalFixed(mean = mean, sd = sd, useExpose = TRUE),
                  series = "population")

@@ -10,13 +10,16 @@ account.R [options]
 
 Options:
 --sex_ratio [default: 106]
+--seed [default: 0]
 ' -> doc
 opts <- docopt(doc)
 sex_ratio <- opts$sex_ratio %>% as.numeric()
+seed <- opts$seed %>% as.numeric()
+
 
 pr_female_male <- c(100 / (100 + sex_ratio), sex_ratio / (100 + sex_ratio))
 
-set.seed(0)
+set.seed(seed)
 
 population <- readRDS("data/census.rds") %>%
     subarray(time == "1996", drop = FALSE) %>%
