@@ -81,7 +81,7 @@ p <- dplot(~ time | age,
 
 graphics.off()
 pdf(file = "out/fig_nz_net_migration.pdf",
-    width = 5,
-    height = 2.5)
+    width = 4,
+    height = 2)
 plot(p)
 dev.off()

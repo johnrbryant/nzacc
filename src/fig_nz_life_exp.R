@@ -23,8 +23,7 @@ p <- dplot(~ time | sex,
            data = life_exp,
            col = "grey",
            xlab = "Year",
-           scales = list(tck = 0.4,
-                         y = list(relation = "free")),
+           scales = list(tck = 0.4),
            midpoints = "time",
            ylab = "Life expectancy",
            prob = c(0.025, 0.5, 0.975),
@@ -35,7 +34,7 @@ p <- dplot(~ time | sex,
 
 graphics.off()
 pdf(file = "out/fig_nz_life_exp.pdf",
-    width = 5,
-    height = 2.5)
+    width = 4,
+    height = 2)
 plot(p)
 dev.off()
