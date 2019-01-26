@@ -27,6 +27,7 @@ p <- dplot(~ time | sex,
                          y = list(relation = "free")),
            midpoints = "time",
            ylab = "Life expectancy",
+           prob = c(0.025, 0.5, 0.975),
            par.settings = list(fontsize = list(text = 7),
                                strip.background = list(col = "grey90")),
            between = list(y = 0.2))

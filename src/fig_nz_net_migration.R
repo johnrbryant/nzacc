@@ -39,22 +39,23 @@ departures_1216 <- fetch("out/model.est",
 net_1216 <- arrivals_1216 - departures_1216
 
 
-age_groups <- c("0-4", "25-29", "50-54", "70+")
+age_groups <- c("0-4", "20-24")
+
 
 p <- dplot(~ time | age,
            data = net_migration,
            subarray = age %in% age_groups,
            as.table = TRUE,
            col = "grey",
-           scales = list(tck = 0.4,
-                         y = list(relation = "free")),
-           layout = c(2, 2),
+           scales = list(tck = 0.4),
            xlab = "Year",
+           ylim = c(-11000, 16000),
            midpoints = "time",
+           prob = c(0.025, 0.5, 0.975),
            ylab = "",
            par.settings = list(fontsize = list(text = 7),
                                strip.background = list(col = "grey90")),
-           between = list(y = 0.2)) +
+           between = list(x = 0.2, y = 0.2)) +
     as.layer(dplot(~ time | age,
                    data = net_plt,
                    type = "l",
@@ -72,11 +73,15 @@ p <- dplot(~ time | age,
                    cex = 0.5,
                    subarray = age %in% age_groups,
                    col = "black"),
-             under = FALSE)
+             under = FALSE) +
+    layer(panel.abline(h = 0, col = "black", lwd = 0.5),
+          under = TRUE)
+    
+
 
 graphics.off()
 pdf(file = "out/fig_nz_net_migration.pdf",
     width = 5,
-    height = 3.5)
+    height = 2.5)
 plot(p)
 dev.off()
