@@ -45,7 +45,7 @@ p <- dplot(~ time | age,
 
 graphics.off()
 pdf(file = "out/fig_nz_population.pdf",
-    width = 5.5,
-    height = 2.2)
+    width = 4.8,
+    height = 2)
 plot(p)
 dev.off()
