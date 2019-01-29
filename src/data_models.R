@@ -65,7 +65,7 @@ arrivals_plt <- Model(arrivals_plt ~ Poisson(mean ~ age + sex),
                                 error = Error(scale = HalfT(scale = 0.05))),
                       series = "in_migration",
                       priorSD = HalfT(scale = 0.1),
-                      jump = 0.035)
+                      jump = 0.045)
 
 departures_plt <- Model(departures_plt ~ Poisson(mean ~ age + sex),
                         age ~ DLM(level = Level(scale = HalfT(scale = 0.05)),
@@ -74,7 +74,7 @@ departures_plt <- Model(departures_plt ~ Poisson(mean ~ age + sex),
                                   error = Error(scale = HalfT(scale = 0.05))),
                         series = "out_migration",
                         priorSD = HalfT(scale = 0.1),
-                        jump = 0.035)
+                        jump = 0.045)
 
 
 ## Arrivals and departures - 12/16 rule
